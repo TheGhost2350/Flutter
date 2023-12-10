@@ -1,0 +1,141 @@
+import 'package:flutter/material.dart';
+
+class Questions {
+  String que;
+  bool ans;
+
+  Questions(this.que, this.ans);
+}
+
+void main() => runApp(MaterialApp(
+  home: MyApp(),
+  debugShowCheckedModeBanner: false,
+));
+
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  var score = 0;
+  var n = 0;
+
+  List<Questions> queList = [
+    Questions("1. MS Word is hardware.", false),
+    Questions("2. CPU controls only input data of the computer.", false),
+    Questions("3. CPU stands for Central Processing Unit.", true),
+    Questions("4. Freeware is software that is available for use at no monetary cost.", true),
+  ];
+
+  void checkAnswer(bool choice, BuildContext ctx) {
+    if (choice == queList[n].ans) {
+      score = score + 1;
+      final snackbar = SnackBar(
+        content: Text("Correct Answer"),
+        duration: Duration(milliseconds: 500),
+        backgroundColor: Colors.green,
+      );
+      ScaffoldMessenger.of(ctx).showSnackBar(snackbar);
+    } else {
+      final snackbar = SnackBar(
+        content: Text("Wrong Answer"),
+        duration: Duration(milliseconds: 500),
+        backgroundColor: Colors.red,
+      );
+      ScaffoldMessenger.of(ctx).showSnackBar(snackbar);
+    }
+    setState(() {
+      if (n < queList.length - 1) {
+        n = n + 1;
+      } else {
+        final snackbar = SnackBar(
+          content: Text("Quiz Completed Score $score/4"),
+          duration: Duration(seconds: 5),
+          backgroundColor: Colors.blueAccent,
+        );
+        ScaffoldMessenger.of(ctx).showSnackBar(snackbar);
+        reset();
+      }
+    });
+  }
+
+  void reset() {
+    setState(() {
+      n = 0;
+      score = 0;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.greenAccent,
+        title: Text("Simple Quiz"),
+        centerTitle: true,
+      ),
+      body: Builder(
+        builder: (ctx) => Container(
+          padding: EdgeInsets.symmetric(vertical: 20, horizontal: 15),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  Text(
+                    "Score : $score/4 ",
+                    style: TextStyle(
+                      color: Colors.brown,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () => reset(),
+                    child: Text(
+                      "Reset ",
+                      style: TextStyle(
+                        color: Colors.red,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 15),
+              Container(
+                height: 100,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15.0),
+                  border: Border.all(color: Colors.brown),
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text(queList[n].que, style: TextStyle(fontSize: 15.0)),
+                  ],
+                ),
+              ),
+              SizedBox(height: 15),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  ElevatedButton(
+                    child: Text("True", style: TextStyle(color: Colors.white, fontSize: 20.0)),
+                    onPressed: () => checkAnswer(true, ctx),
+                  ),
+                  ElevatedButton(
+                    child: Text("False", style: TextStyle(color: Colors.white, fontSize: 20.0)),
+                    onPressed: () => checkAnswer(false, ctx),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}

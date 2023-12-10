@@ -1,0 +1,71 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  List<Widget> _spaces = <Widget>[
+    Text(
+      'Home Page',
+      style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+    ),
+    Text(
+      'Search Page',
+      style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+    ),
+    Text(
+      'Account Page',
+      style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+    ),
+  ];
+
+  // local variable
+  int _index = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'My App',
+      theme: ThemeData(primarySwatch: Colors.green),
+      darkTheme: ThemeData.dark(),
+      home: Scaffold(
+        appBar: AppBar(
+          leading: Icon(Icons.arrow_back),
+          title: Text("Local State Management"),
+          centerTitle: true,
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          currentIndex: _index,
+          onTap: (newIndex) {
+            setState(() {
+              // changing in widget
+              _index = newIndex;
+              print('$_index');
+            });
+          },
+          items: [
+            BottomNavigationBarItem(
+              label: "Home",
+              icon: Icon(Icons.home),
+            ),
+            BottomNavigationBarItem(
+              label: "Search",
+              icon: Icon(Icons.search),
+            ),
+            BottomNavigationBarItem(
+              label: "Account",
+              icon: Icon(Icons.person),
+            ),
+          ],
+        ),
+        body: Center(child: _spaces.elementAt(_index)),
+      ),
+    );
+  }
+}
